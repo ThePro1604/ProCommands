@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "svoicecommands",
+  "version": "${version}",
+  "name": "VoiceCommands",
+  "icon": "assets/svoicecommands/icon.png",
+  "description": "Source engine style voice command menu system to send commands to chat",
+  "authors": [
+    "kittheuh"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/kittheuh/VoiceCommands",
+    "issues": "https://github.com/kittheuh/VoiceCommands/issues"
+  },
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "io.github.kittheuh.voicecmd.client.VoiceCommandsClient"
+    ],
+    "modmenu": [
+      "io.github.kittheuh.voicecmd.client.ModMenuConfig"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "kth-voicecmd.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "cloth-config": ">=${cloth_version}"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

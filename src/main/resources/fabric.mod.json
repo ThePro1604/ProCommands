@@ -9,11 +9,11 @@
     "kittheuh"
   ],
   "contact": {
-    "homepage": "",
+    "homepage": "https://modrinth.com/mod/voicecommands",
     "sources": "https://github.com/kittheuh/VoiceCommands",
     "issues": "https://github.com/kittheuh/VoiceCommands/issues"
   },
-  "license": "All-Rights-Reserved",
+  "license": "Apache-2.0",
   "environment": "client",
   "entrypoints": {
     "client": [

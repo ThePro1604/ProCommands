@@ -6,6 +6,7 @@
   "key.category.svoicecommands.menus": "Voice Command Menus",
 
   "svoicecommands.voicemenu.close": "%1$s. Close",
+  "svoicecommands.error.message_too_long": "Your voice command message was too long and was truncated (%1$s > %2$s)",
 
   "svoicecommands.config.title": "Voice Commands",
 
@@ -19,6 +20,8 @@
   "svoicecommands.config.option.menu_text_color.label": "Menu Text Color",
   "svoicecommands.config.option.menu_text_shadow.label": "Menu Text Shadow",
 
+  "svoicecommands.config.option.voicemenu.auto_append_spacer.label": "Auto Include Space",
+  "svoicecommands.config.option.voicemenu.auto_append_spacer.tooltip": "Add a space between the prefix and the message.\nThis is useful if your prefix is a command, but may cause issues if the message itself is the command or also apart of the command.",
   "svoicecommands.config.option.voicemenu.use_custom_prefix.label": "Use Custom Prefix",
   "svoicecommands.config.option.voicemenu.use_custom_prefix.tooltip": "Override the global prefix for this menu only",
   "svoicecommands.config.option.voicemenu.custom_prefix.label": "Custom Prefix",

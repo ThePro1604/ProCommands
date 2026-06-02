@@ -1,10 +1,13 @@
 package io.github.kittheuh.voicecmd.client;
 
 import io.github.kittheuh.voicecmd.VoiceCommands;
+import io.github.kittheuh.voicecmd.client.config.MenuValues;
 import io.github.kittheuh.voicecmd.client.config.VoiceConfig;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringUtil;
 import org.lwjgl.glfw.GLFW;
@@ -72,23 +75,29 @@ public class VoiceMenuManager {
     public boolean dispatchCommandSelect(int index) {
         if (activeMenu == null) return false;
 
-        String line = activeMenu.line(index);
-        if (line == null) return false;
+        String message = activeMenu.line(index);
+        if (message == null) return false;
 
         activeMenu.displaying(false);
         activeMenu = null;
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return false;
 
-        String prefix = VoiceConfig.chatPrefix(activeMenuIndex);
-        if (prefix != null) prefix = prefix.trim();
+        MenuValues values = VoiceConfig.configMenuValues(activeMenuIndex);
+        String prefix = values.effectivePrefix();
 
-        if (prefix != null) {
-            // chat msg drops connection if over 256, whereas command nags the client
-            if (prefix.startsWith("/")) player.connection.sendCommand(prefix.substring(1) + " " + line);
-            else player.connection.sendChat(StringUtil.trimChatMessage(prefix + " " + line));
-        } else {
-            player.connection.sendChat(StringUtil.trimChatMessage(line));
+        message = (prefix == null ? "" : prefix) + (values.autoAppendSpacer() ? " " : "") + message;
+        if (message.startsWith("/")) player.connection.sendCommand(message.substring(1));
+        else {
+            int oldLength = message.length();
+            message = StringUtil.trimChatMessage(message);
+
+            if (oldLength != message.length()) {
+                player.sendSystemMessage(Component.translatable("svoicecommands.error.message_too_long", oldLength, message.length())
+                        .withStyle(ChatFormatting.RED));
+            }
+
+            player.connection.sendChat(message);
         }
         return true;
     }

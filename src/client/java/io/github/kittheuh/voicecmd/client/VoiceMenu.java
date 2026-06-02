@@ -4,14 +4,14 @@ import com.mojang.blaze3d.platform.InputConstants;
 import io.github.kittheuh.voicecmd.VoiceCommands;
 import io.github.kittheuh.voicecmd.client.config.MenuValues;
 import io.github.kittheuh.voicecmd.client.config.VoiceConfig;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringUtil;
@@ -31,7 +31,7 @@ public class VoiceMenu implements HudElement {
     public VoiceMenu(String suffix, int keycode, KeyMapping.Category category, MenuValues values) {
         this.values = values;
 
-        keyMapping = KeyBindingHelper.registerKeyBinding(
+        keyMapping = KeyMappingHelper.registerKeyMapping(
                 new KeyMapping("key.%s.%s".formatted(VoiceCommands.MOD_ID, suffix), InputConstants.Type.KEYSYM, keycode, category)
         );
         HudElementRegistry.addFirst(Identifier.fromNamespaceAndPath(VoiceCommands.MOD_ID, suffix), this);
@@ -67,7 +67,8 @@ public class VoiceMenu implements HudElement {
         return displaying;
     }
 
-    public void render(@NotNull GuiGraphics g, @NotNull DeltaTracker tracker) {
+    @Override
+    public void extractRenderState(@NotNull GuiGraphicsExtractor g, @NotNull DeltaTracker tracker) {
         if (!displaying) return;
 
         List<Component> components = new ArrayList<>();
@@ -107,7 +108,7 @@ public class VoiceMenu implements HudElement {
         for (int i = 0; i < components.size(); i++) {
             Component c = components.get(i);
 
-            g.drawString(mcFont, c, menuX + spacer, ypos + (lineHeight*i), VoiceConfig.textColor(), VoiceConfig.textShadow());
+            g.text(mcFont, c, menuX + spacer, ypos + (lineHeight*i), VoiceConfig.textColor(), VoiceConfig.textShadow());
         }
     }
 

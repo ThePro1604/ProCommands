@@ -5,7 +5,7 @@ import io.github.kittheuh.voicecmd.VoiceCommands;
 import io.github.kittheuh.voicecmd.client.config.VoiceConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
@@ -25,8 +25,10 @@ public class VoiceCommandsClient implements ClientModInitializer {
         manager = new VoiceMenuManager();
         ClientTickEvents.END_CLIENT_TICK.register(manager::processInput);
 
-        settingsKeyMapping = KeyBindingHelper.registerKeyBinding(
-                new KeyMapping("key.%s.open_settings".formatted(VoiceCommands.MOD_ID), InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F8, manager.menuCategory())
+        settingsKeyMapping = KeyMappingHelper.registerKeyMapping(
+                new KeyMapping("key.%s.open_settings".formatted(VoiceCommands.MOD_ID),
+                        InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F8, manager.menuCategory()
+                )
         );
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
             while (settingsKeyMapping.consumeClick()) {

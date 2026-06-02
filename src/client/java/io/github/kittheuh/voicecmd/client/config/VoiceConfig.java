@@ -107,9 +107,7 @@ public class VoiceConfig {
         return menuValues[i];
     }
 
-    public static String chatPrefix(int i) {
-        MenuValues values = configMenuValues(i);
-        if (values.usePrefix()) return values.prefix();
+    public static String globalChatPrefix() {
         return globalChatPrefix;
     }
 
@@ -191,6 +189,13 @@ public class VoiceConfig {
                     .fillKeybindingField(Component.translatable("key.%s.menu%d".formatted(VoiceCommands.MOD_ID, i+1)), voiceMenu.keyMapping())
                     .build()
             );
+
+            BooleanListEntry autoAppendSpacerToggle = ConfigEntryBuilder.create()
+                    .startBooleanToggle(Component.translatable("svoicecommands.config.option.voicemenu.auto_append_spacer.label"), values.autoAppendSpacer())
+                    .setTooltip(Component.translatable("svoicecommands.config.option.voicemenu.auto_append_spacer.tooltip"))
+                    .setSaveConsumer(values::autoAppendSpacer)
+                    .build();
+            category.addEntry(autoAppendSpacerToggle);
 
             BooleanListEntry useCustomPrefixToggle = ConfigEntryBuilder.create()
                     .startBooleanToggle(Component.translatable("svoicecommands.config.option.voicemenu.use_custom_prefix.label"), values.usePrefix())

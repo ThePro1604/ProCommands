@@ -2,6 +2,8 @@ package io.github.kittheuh.voicecmd.client.config;
 
 import net.minecraft.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Properties;
@@ -11,7 +13,7 @@ public class MenuValues {
 
     private final String[] shorthandDef, messageDef;
     private final String[] shorthand, message;
-    private boolean usePrefix = false;
+    private boolean usePrefix = false, autoAppendSpacer = true;
     private String prefix = "";
 
     public MenuValues(String[] shorthand, String[] message) {
@@ -41,6 +43,7 @@ public class MenuValues {
         }
 
         usePrefix = Boolean.parseBoolean(properties.getProperty(settingPrefix + "use-prefix", "false"));
+        autoAppendSpacer = Boolean.parseBoolean(properties.getProperty(settingPrefix + "auto-append-spacer", "true"));
         prefix = properties.getProperty(settingPrefix + "prefix", "");
     }
 
@@ -56,6 +59,7 @@ public class MenuValues {
         }
 
         properties.setProperty(settingPrefix + "use-prefix", Boolean.toString(usePrefix));
+        properties.setProperty(settingPrefix + "auto-append-spacer", Boolean.toString(autoAppendSpacer));
         properties.setProperty(settingPrefix + "prefix", prefix);
     }
 
@@ -101,9 +105,24 @@ public class MenuValues {
         this.usePrefix = usePrefix;
     }
 
+    public boolean autoAppendSpacer() {
+        return autoAppendSpacer;
+    }
+
+    public void autoAppendSpacer(boolean autoAppendSpacer) {
+        this.autoAppendSpacer = autoAppendSpacer;
+    }
+
+    @NotNull
     public String prefix() {
         if (prefix == null) prefix = "";
         return prefix;
+    }
+
+    @Nullable
+    public String effectivePrefix() {
+        if (usePrefix) return prefix;
+        return VoiceConfig.globalChatPrefix();
     }
 
     public void prefix(String prefix) {

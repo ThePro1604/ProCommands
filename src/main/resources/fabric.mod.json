@@ -1,31 +1,33 @@
 {
   "schemaVersion": 1,
-  "id": "svoicecommands",
+  "id": "procommands",
   "version": "${version}",
-  "name": "VoiceCommands",
-  "icon": "assets/svoicecommands/icon.png",
+  "name": "ProCommands",
+  "icon": "assets/procommands/icon.png",
   "description": "Source engine style voice command menu system to send commands to chat",
   "authors": [
+    "ThePro1604"
+  ],
+  "contributors": [
     "kittheuh"
   ],
   "contact": {
-    "homepage": "https://modrinth.com/mod/voicecommands",
-    "sources": "https://github.com/kittheuh/VoiceCommands",
-    "issues": "https://github.com/kittheuh/VoiceCommands/issues"
+    "sources": "https://github.com/ThePro1604/ProCommands",
+    "issues": "https://github.com/ThePro1604/ProCommands/issues"
   },
   "license": "Apache-2.0",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "io.github.kittheuh.voicecmd.client.VoiceCommandsClient"
+      "io.github.thepro1604.procommands.client.ProCommandsClient"
     ],
     "modmenu": [
-      "io.github.kittheuh.voicecmd.client.ModMenuConfig"
+      "io.github.thepro1604.procommands.client.ModMenuConfig"
     ]
   },
   "mixins": [
     {
-      "config": "kth-voicecmd.client.mixins.json",
+      "config": "procommands.client.mixins.json",
       "environment": "client"
     }
   ],

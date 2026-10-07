@@ -1,17 +1,16 @@
-package io.github.kittheuh.voicecmd.client;
+package io.github.thepro1604.procommands.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import io.github.kittheuh.voicecmd.VoiceCommands;
-import io.github.kittheuh.voicecmd.client.config.VoiceConfig;
+import io.github.thepro1604.procommands.ProCommands;
+import io.github.thepro1604.procommands.client.config.VoiceConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
-import org.lwjgl.glfw.GLFW;
 
-public class VoiceCommandsClient implements ClientModInitializer {
-    private static VoiceCommandsClient instance;
-    public static VoiceCommandsClient instance() {
+public class ProCommandsClient implements ClientModInitializer {
+    private static ProCommandsClient instance;
+    public static ProCommandsClient instance() {
         return instance;
     }
 
@@ -26,8 +25,8 @@ public class VoiceCommandsClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(manager::processInput);
 
         settingsKeyMapping = KeyMappingHelper.registerKeyMapping(
-                new KeyMapping("key.%s.open_settings".formatted(VoiceCommands.MOD_ID),
-                        InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F8, manager.menuCategory()
+                new KeyMapping("key.%s.open_settings".formatted(ProCommands.MOD_ID),
+                        InputConstants.Type.KEYBOARD, InputConstants.KEY_F8, manager.menuCategory()
                 )
         );
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {

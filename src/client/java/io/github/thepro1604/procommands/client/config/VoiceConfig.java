@@ -1,9 +1,9 @@
-package io.github.kittheuh.voicecmd.client.config;
+package io.github.thepro1604.procommands.client.config;
 
-import io.github.kittheuh.voicecmd.VoiceCommands;
-import io.github.kittheuh.voicecmd.client.VoiceCommandsClient;
-import io.github.kittheuh.voicecmd.client.VoiceMenu;
-import io.github.kittheuh.voicecmd.client.VoiceMenuManager;
+import io.github.thepro1604.procommands.ProCommands;
+import io.github.thepro1604.procommands.client.ProCommandsClient;
+import io.github.thepro1604.procommands.client.VoiceMenu;
+import io.github.thepro1604.procommands.client.VoiceMenuManager;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -24,7 +24,8 @@ import java.nio.file.Path;
 import java.util.Properties;
 
 public class VoiceConfig {
-    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("voicecommands.properties");
+    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("procommands.properties");
+    private static final Path LEGACY_CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("voicecommands.properties");
 
     private static final MenuValues[] menuValues = new MenuValues[3];
 
@@ -53,6 +54,7 @@ public class VoiceConfig {
     }
 
     public static void loadConfig() {
+        migrateLegacyConfig();
         if (Files.notExists(CONFIG_PATH)) return;
 
         Properties properties = new Properties();
@@ -66,20 +68,32 @@ public class VoiceConfig {
             try {
                 backgroundColor = Integer.parseInt(properties.getProperty("global.background-color", String.valueOf(ARGB.black(128))));
             } catch (NumberFormatException e) {
-                VoiceCommands.LOGGER.warn("Invalid value set for menu background color");
+                ProCommands.LOGGER.warn("Invalid value set for menu background color");
             }
 
             try {
                 textColor = Integer.parseInt(properties.getProperty("global.text-color", String.valueOf(ARGB.white(192))));
             } catch (NumberFormatException e) {
-                VoiceCommands.LOGGER.warn("Invalid value set for menu text color");
+                ProCommands.LOGGER.warn("Invalid value set for menu text color");
             }
 
             for (int i = 0; i < menuValues.length; i++) {
                 menuValues[i].load(properties, i);
             }
         } catch (IOException e) {
-            VoiceCommands.LOGGER.error("Failed to load config file", e);
+            ProCommands.LOGGER.error("Failed to load config file", e);
+        }
+    }
+
+    // carry over settings from when the mod was named VoiceCommands
+    private static void migrateLegacyConfig() {
+        if (Files.exists(CONFIG_PATH) || Files.notExists(LEGACY_CONFIG_PATH)) return;
+
+        try {
+            Files.copy(LEGACY_CONFIG_PATH, CONFIG_PATH);
+            ProCommands.LOGGER.info("Migrated config from {}", LEGACY_CONFIG_PATH.getFileName());
+        } catch (IOException e) {
+            ProCommands.LOGGER.warn("Failed to migrate legacy config file", e);
         }
     }
 
@@ -97,9 +111,9 @@ public class VoiceConfig {
                 menuValues[i].save(properties, i);
             }
 
-            properties.store(stream, "VoiceCommand mod configuration file");
+            properties.store(stream, "ProCommands mod configuration file");
         } catch (IOException e) {
-            VoiceCommands.LOGGER.error("Failed to save config file", e);
+            ProCommands.LOGGER.error("Failed to save config file", e);
         }
     }
 
@@ -128,51 +142,51 @@ public class VoiceConfig {
     }
 
     public static Screen createConfigScreen() {
-        VoiceMenuManager manager = VoiceCommandsClient.instance().manager();
+        VoiceMenuManager manager = ProCommandsClient.instance().manager();
 
         ConfigBuilder builder = ConfigBuilder.create()
-                .setTitle(Component.translatable("svoicecommands.config.title"))
+                .setTitle(Component.translatable("procommands.config.title"))
                 .setTransparentBackground(true)
                 .setSavingRunnable(VoiceConfig::saveConfig);
 
-        ConfigCategory mainCategory = builder.getOrCreateCategory(Component.translatable("svoicecommands.config.tab.global"));
+        ConfigCategory mainCategory = builder.getOrCreateCategory(Component.translatable("procommands.config.tab.global"));
         mainCategory.addEntry(ConfigEntryBuilder.create()
-                .fillKeybindingField(Component.translatable("key.%s.open_settings".formatted(VoiceCommands.MOD_ID)), VoiceCommandsClient.instance().settingsKeyMapping())
+                .fillKeybindingField(Component.translatable("key.%s.open_settings".formatted(ProCommands.MOD_ID)), ProCommandsClient.instance().settingsKeyMapping())
                 .build()
         );
 
         mainCategory.addEntry(ConfigEntryBuilder.create()
-                .startBooleanToggle(Component.translatable("svoicecommands.config.option.block_hotbar_slot_change.label"), blockSlotChange)
+                .startBooleanToggle(Component.translatable("procommands.config.option.block_hotbar_slot_change.label"), blockSlotChange)
                 .setDefaultValue(true)
-                .setTooltip(Component.translatable("svoicecommands.config.option.block_hotbar_slot_change.tooltip"))
+                .setTooltip(Component.translatable("procommands.config.option.block_hotbar_slot_change.tooltip"))
                 .setSaveConsumer(b -> blockSlotChange = b)
                 .build()
         );
 
         mainCategory.addEntry(ConfigEntryBuilder.create()
-                .startStrField(Component.translatable("svoicecommands.config.option.global_prefix.label"), globalChatPrefix)
-                .setTooltip(Component.translatable("svoicecommands.config.option.global_prefix.tooltip"))
+                .startStrField(Component.translatable("procommands.config.option.global_prefix.label"), globalChatPrefix)
+                .setTooltip(Component.translatable("procommands.config.option.global_prefix.tooltip"))
                 .setDefaultValue("(Voice)")
                 .setSaveConsumer(string -> globalChatPrefix = string)
                 .build()
         );
 
         mainCategory.addEntry(ConfigEntryBuilder.create()
-                .startAlphaColorField(Component.translatable("svoicecommands.config.option.menu_background_color.label"), backgroundColor)
+                .startAlphaColorField(Component.translatable("procommands.config.option.menu_background_color.label"), backgroundColor)
                 .setDefaultValue(ARGB.black(128))
                 .setSaveConsumer(i -> backgroundColor = i)
                 .build()
         );
 
         mainCategory.addEntry(ConfigEntryBuilder.create()
-                .startAlphaColorField(Component.translatable("svoicecommands.config.option.menu_text_color.label"), textColor)
+                .startAlphaColorField(Component.translatable("procommands.config.option.menu_text_color.label"), textColor)
                 .setDefaultValue(ARGB.white(192))
                 .setSaveConsumer(i -> textColor = i)
                 .build()
         );
 
         mainCategory.addEntry(ConfigEntryBuilder.create()
-                .startBooleanToggle(Component.translatable("svoicecommands.config.option.menu_text_shadow.label"), textShadow)
+                .startBooleanToggle(Component.translatable("procommands.config.option.menu_text_shadow.label"), textShadow)
                 .setDefaultValue(true)
                 .setSaveConsumer(b -> textShadow = b)
                 .build()
@@ -183,30 +197,30 @@ public class VoiceConfig {
             VoiceMenu voiceMenu = voiceMenus[i];
             MenuValues values = menuValues[i];
 
-            ConfigCategory category = builder.getOrCreateCategory(Component.translatable("svoicecommands.config.tab.voicemenu", i + 1));
+            ConfigCategory category = builder.getOrCreateCategory(Component.translatable("procommands.config.tab.voicemenu", i + 1));
 
             category.addEntry(ConfigEntryBuilder.create()
-                    .fillKeybindingField(Component.translatable("key.%s.menu%d".formatted(VoiceCommands.MOD_ID, i+1)), voiceMenu.keyMapping())
+                    .fillKeybindingField(Component.translatable("key.%s.menu%d".formatted(ProCommands.MOD_ID, i+1)), voiceMenu.keyMapping())
                     .build()
             );
 
             BooleanListEntry autoAppendSpacerToggle = ConfigEntryBuilder.create()
-                    .startBooleanToggle(Component.translatable("svoicecommands.config.option.voicemenu.auto_append_spacer.label"), values.autoAppendSpacer())
-                    .setTooltip(Component.translatable("svoicecommands.config.option.voicemenu.auto_append_spacer.tooltip"))
+                    .startBooleanToggle(Component.translatable("procommands.config.option.voicemenu.auto_append_spacer.label"), values.autoAppendSpacer())
+                    .setTooltip(Component.translatable("procommands.config.option.voicemenu.auto_append_spacer.tooltip"))
                     .setSaveConsumer(values::autoAppendSpacer)
                     .build();
             category.addEntry(autoAppendSpacerToggle);
 
             BooleanListEntry useCustomPrefixToggle = ConfigEntryBuilder.create()
-                    .startBooleanToggle(Component.translatable("svoicecommands.config.option.voicemenu.use_custom_prefix.label"), values.usePrefix())
-                    .setTooltip(Component.translatable("svoicecommands.config.option.voicemenu.use_custom_prefix.tooltip"))
+                    .startBooleanToggle(Component.translatable("procommands.config.option.voicemenu.use_custom_prefix.label"), values.usePrefix())
+                    .setTooltip(Component.translatable("procommands.config.option.voicemenu.use_custom_prefix.tooltip"))
                     .setSaveConsumer(values::usePrefix)
                     .build();
             category.addEntry(useCustomPrefixToggle);
 
             StringListEntry customPrefixField = ConfigEntryBuilder.create()
-                    .startStrField(Component.translatable("svoicecommands.config.option.voicemenu.custom_prefix.label"), values.prefix())
-                    .setTooltip(Component.translatable("svoicecommands.config.option.voicemenu.custom_prefix.tooltip"))
+                    .startStrField(Component.translatable("procommands.config.option.voicemenu.custom_prefix.label"), values.prefix())
+                    .setTooltip(Component.translatable("procommands.config.option.voicemenu.custom_prefix.tooltip"))
                     .setDefaultValue("")
                     .setSaveConsumer(values::prefix)
                     .setDisplayRequirement(Requirement.isTrue(useCustomPrefixToggle))
@@ -215,23 +229,23 @@ public class VoiceConfig {
 
             for (int j = 0; j < MenuValues.MAX_VALUES; j++) {
                 SubCategoryBuilder subCategory = ConfigEntryBuilder.create()
-                        .startSubCategory(Component.translatable("svoicecommands.config.option.voicemenu.sub_entry.label", j + 1))
-                        .setTooltip(Component.translatable("svoicecommands.config.option.voicemenu.sub_entry.tooltip"));
+                        .startSubCategory(Component.translatable("procommands.config.option.voicemenu.sub_entry.label", j + 1))
+                        .setTooltip(Component.translatable("procommands.config.option.voicemenu.sub_entry.tooltip"));
 
                 final int index = j;
                 subCategory.add(ConfigEntryBuilder.create()
-                        .startStrField(Component.translatable("svoicecommands.config.option.voicemenu.shorthand.label"), values.shorthandValue(j))
+                        .startStrField(Component.translatable("procommands.config.option.voicemenu.shorthand.label"), values.shorthandValue(j))
                         .setDefaultValue(values.shorthandDef()[j])
                         .setSaveConsumer(s -> values.updateShorthand(index, s))
-                        .setTooltip(Component.translatable("svoicecommands.config.option.voicemenu.shorthand.tooltip"))
+                        .setTooltip(Component.translatable("procommands.config.option.voicemenu.shorthand.tooltip"))
                         .build()
                 );
 
                 subCategory.add(ConfigEntryBuilder.create()
-                        .startStrField(Component.translatable("svoicecommands.config.option.voicemenu.message.label"), values.messageValue(j))
+                        .startStrField(Component.translatable("procommands.config.option.voicemenu.message.label"), values.messageValue(j))
                         .setDefaultValue(values.messageDef()[j])
                         .setSaveConsumer(s -> values.updateMessage(index, s))
-                        .setTooltip(Component.translatable("svoicecommands.config.option.voicemenu.message.tooltip"))
+                        .setTooltip(Component.translatable("procommands.config.option.voicemenu.message.tooltip"))
 
                         .build()
                 );

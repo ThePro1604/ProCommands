@@ -1,4 +1,4 @@
-package io.github.kittheuh.voicecmd.client.config;
+package io.github.thepro1604.procommands.client.config;
 
 import net.minecraft.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;

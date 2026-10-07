@@ -1,8 +1,8 @@
-package io.github.kittheuh.voicecmd.client;
+package io.github.thepro1604.procommands.client;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import io.github.kittheuh.voicecmd.client.config.VoiceConfig;
+import io.github.thepro1604.procommands.client.config.VoiceConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

@@ -1,9 +1,9 @@
-package io.github.kittheuh.voicecmd.client;
+package io.github.thepro1604.procommands.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import io.github.kittheuh.voicecmd.VoiceCommands;
-import io.github.kittheuh.voicecmd.client.config.MenuValues;
-import io.github.kittheuh.voicecmd.client.config.VoiceConfig;
+import io.github.thepro1604.procommands.ProCommands;
+import io.github.thepro1604.procommands.client.config.MenuValues;
+import io.github.thepro1604.procommands.client.config.VoiceConfig;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
@@ -32,9 +32,9 @@ public class VoiceMenu implements HudElement {
         this.values = values;
 
         keyMapping = KeyMappingHelper.registerKeyMapping(
-                new KeyMapping("key.%s.%s".formatted(VoiceCommands.MOD_ID, suffix), InputConstants.Type.KEYSYM, keycode, category)
+                new KeyMapping("key.%s.%s".formatted(ProCommands.MOD_ID, suffix), InputConstants.Type.KEYBOARD, keycode, category)
         );
-        HudElementRegistry.addFirst(Identifier.fromNamespaceAndPath(VoiceCommands.MOD_ID, suffix), this);
+        HudElementRegistry.addFirst(Identifier.fromNamespaceAndPath(ProCommands.MOD_ID, suffix), this);
     }
 
     public KeyMapping keyMapping() {
@@ -82,7 +82,7 @@ public class VoiceMenu implements HudElement {
             components.add(c);
         }
 
-        Component closeComp = Component.translatable("svoicecommands.voicemenu.close", keyMapping.getTranslatedKeyMessage());
+        Component closeComp = Component.translatable("procommands.voicemenu.close", keyMapping.getTranslatedKeyMessage());
         components.add(closeComp);
 
         Minecraft minecraft = Minecraft.getInstance();

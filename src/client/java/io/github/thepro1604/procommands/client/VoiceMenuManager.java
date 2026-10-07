@@ -1,8 +1,9 @@
-package io.github.kittheuh.voicecmd.client;
+package io.github.thepro1604.procommands.client;
 
-import io.github.kittheuh.voicecmd.VoiceCommands;
-import io.github.kittheuh.voicecmd.client.config.MenuValues;
-import io.github.kittheuh.voicecmd.client.config.VoiceConfig;
+import com.mojang.blaze3d.platform.InputConstants;
+import io.github.thepro1604.procommands.ProCommands;
+import io.github.thepro1604.procommands.client.config.MenuValues;
+import io.github.thepro1604.procommands.client.config.VoiceConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -10,7 +11,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringUtil;
-import org.lwjgl.glfw.GLFW;
 
 public class VoiceMenuManager {
     private VoiceMenu activeMenu = null;
@@ -23,12 +23,12 @@ public class VoiceMenuManager {
 
     public VoiceMenuManager() {
         menuCategory = new KeyMapping.Category(
-                Identifier.fromNamespaceAndPath(VoiceCommands.MOD_ID, "menus")
+                Identifier.fromNamespaceAndPath(ProCommands.MOD_ID, "menus")
         );
 
-        menu1 = new VoiceMenu("menu1", GLFW.GLFW_KEY_Z, menuCategory, VoiceConfig.configMenuValues(0));
-        menu2 = new VoiceMenu("menu2", GLFW.GLFW_KEY_X, menuCategory, VoiceConfig.configMenuValues(1));
-        menu3 = new VoiceMenu("menu3", GLFW.GLFW_KEY_C, menuCategory, VoiceConfig.configMenuValues(2));
+        menu1 = new VoiceMenu("menu1", InputConstants.KEY_Z, menuCategory, VoiceConfig.configMenuValues(0));
+        menu2 = new VoiceMenu("menu2", InputConstants.KEY_X, menuCategory, VoiceConfig.configMenuValues(1));
+        menu3 = new VoiceMenu("menu3", InputConstants.KEY_C, menuCategory, VoiceConfig.configMenuValues(2));
     }
 
     public KeyMapping.Category menuCategory() {
@@ -93,7 +93,7 @@ public class VoiceMenuManager {
             message = StringUtil.trimChatMessage(message);
 
             if (oldLength != message.length()) {
-                player.sendSystemMessage(Component.translatable("svoicecommands.error.message_too_long", oldLength, message.length())
+                player.sendSystemMessage(Component.translatable("procommands.error.message_too_long", oldLength, message.length())
                         .withStyle(ChatFormatting.RED));
             }
 

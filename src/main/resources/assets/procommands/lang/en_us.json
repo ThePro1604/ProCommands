@@ -1,0 +1,38 @@
+{
+  "key.procommands.menu1": "Open Voice Menu 1",
+  "key.procommands.menu2": "Open Voice Menu 2",
+  "key.procommands.menu3": "Open Voice Menu 3",
+  "key.procommands.open_settings": "Open Voice Command Settings",
+  "key.category.procommands.menus": "Voice Command Menus",
+
+  "procommands.voicemenu.close": "%1$s. Close",
+  "procommands.error.message_too_long": "Your voice command message was too long and was truncated (%1$s > %2$s)",
+
+  "procommands.config.title": "ProCommands",
+
+  "procommands.config.tab.global": "Global Settings",
+  "procommands.config.tab.voicemenu": "Voice Menu %1$s",
+  "procommands.config.option.block_hotbar_slot_change.label": "Block Hotbar Slot Change",
+  "procommands.config.option.block_hotbar_slot_change.tooltip": "When issuing a voice command, this option blocks whether it would actually switch your currently held item or not\nThis does not affect use of the scroll wheel for slot changing",
+  "procommands.config.option.global_prefix.label": "Global Prefix",
+  "procommands.config.option.global_prefix.tooltip": "Prefix to include before the command message\nIf a command is set as the prefix, the message will be sent as a command",
+  "procommands.config.option.menu_background_color.label": "Menu Background Color",
+  "procommands.config.option.menu_text_color.label": "Menu Text Color",
+  "procommands.config.option.menu_text_shadow.label": "Menu Text Shadow",
+
+  "procommands.config.option.voicemenu.auto_append_spacer.label": "Auto Include Space",
+  "procommands.config.option.voicemenu.auto_append_spacer.tooltip": "Add a space between the prefix and the message.\nThis is useful if your prefix is a command, but may cause issues if the message itself is the command or also apart of the command.",
+  "procommands.config.option.voicemenu.use_custom_prefix.label": "Use Custom Prefix",
+  "procommands.config.option.voicemenu.use_custom_prefix.tooltip": "Override the global prefix for this menu only",
+  "procommands.config.option.voicemenu.custom_prefix.label": "Custom Prefix",
+  "procommands.config.option.voicemenu.custom_prefix.tooltip": "Global prefix override",
+
+  "procommands.config.option.voicemenu.sub_entry.label": "Command #%1$s",
+  "procommands.config.option.voicemenu.sub_entry.tooltip": "Commands must have a shorthand and a message to appear on the menu and be functional",
+
+  "procommands.config.option.voicemenu.shorthand.label": "Shorthand",
+  "procommands.config.option.voicemenu.shorthand.tooltip": "Short, concise one liner that appears in the voice menu\nSet blank to disable",
+  "procommands.config.option.voicemenu.message.label": "Message",
+  "procommands.config.option.voicemenu.message.tooltip": "The message sent out when the voice command is issued\nSet blank to disable"
+
+}
